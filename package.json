@@ -1,0 +1,20 @@
+{
+  "name": "youtube",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lavalink": "java -jar Lavalink.jar"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "canvacord": "^5.0.8",
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
+    "erela.js": "^2.3.2",
+    "mongoose": "^5.11.17",
+    "random": "^2.2.0"
+  }
+}
