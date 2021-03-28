@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const Profile = require("./src/databases/Profile.js");
 const GuildConfig = require("./src/databases/GuildConfig");
 const canvacord = require("canvacord");
+const Spotify = require("erela.js-spotify");
 
 const client = new Discord.Client();
 const { Manager } = require("erela.js");
@@ -13,6 +14,8 @@ mongoose.connect(process.env.MONGO, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+const clientID = "1197d3d14a924b99bb5bcc1f4c3ed0e0";
+const clientSecret = "d2f7a49a775c4212becc1bb9227f2184";
 
 client.manager = new Manager({
   nodes: [
@@ -26,6 +29,13 @@ client.manager = new Manager({
     const guild = client.guilds.cache.get(id);
     if (guild) guild.shard.send(payload);
   },
+  plugins: [
+    // Initiate the plugin and pass the two required options.
+    new Spotify({
+      clientID,
+      clientSecret,
+    }),
+  ],
 })
   .on("nodeConnect", (node) =>
     console.log(`Node ${node.options.identifier} connected`)
@@ -223,22 +233,20 @@ client.on("message", async (message) => {
         break;
     }
   } else if (message.content.startsWith(`${prefix}pause`)) {
-    const player = client.manager.players.get(message.guild.id)
-    if (!player) return message.channel.send("Bruh there is nothing playing")
-    await player.pause(true)
-    message.channel.send("Paused!")
-  }
-  else if (message.content.startsWith(`${prefix}resume`)) {
-    const player = client.manager.players.get(message.guild.id)
-    if (!player) return message.channel.send("Bruh there is nothing playing")
-    await player.pause(false)
-    message.channel.send("Resumed!")
-  }
-  else if (message.content.startsWith(`${prefix}leave`)) {
-    const player = client.manager.players.get(message.guild.id)
-    if (!player) return message.channel.send("Bruh there is nothing playing")
-    await player.destroy()
-    message.channel.send("Left the VC and destroyed the player!")
+    const player = client.manager.players.get(message.guild.id);
+    if (!player) return message.channel.send("Bruh there is nothing playing");
+    await player.pause(true);
+    message.channel.send("Paused!");
+  } else if (message.content.startsWith(`${prefix}resume`)) {
+    const player = client.manager.players.get(message.guild.id);
+    if (!player) return message.channel.send("Bruh there is nothing playing");
+    await player.pause(false);
+    message.channel.send("Resumed!");
+  } else if (message.content.startsWith(`${prefix}leave`)) {
+    const player = client.manager.players.get(message.guild.id);
+    if (!player) return message.channel.send("Bruh there is nothing playing");
+    await player.destroy();
+    message.channel.send("Left the VC and destroyed the player!");
   }
 });
 
